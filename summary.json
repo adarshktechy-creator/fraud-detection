@@ -1,0 +1,107 @@
+{
+  "model_metrics": {
+    "baseline_random": {
+      "pr_auc": 0.00415,
+      "roc_auc": 0.5
+    },
+    "GBM (no imbalance handling)": {
+      "pr_auc": 0.5518625668920172,
+      "roc_auc": 0.8241783051605258
+    },
+    "GBM + class weighting": {
+      "pr_auc": 0.8388424161379795,
+      "roc_auc": 0.9955800171783853
+    },
+    "GBM + SMOTE (10% minority)": {
+      "pr_auc": 0.8258283668893361,
+      "roc_auc": 0.9917496969854616
+    },
+    "Isolation Forest (unsupervised)": {
+      "pr_auc": 0.6351742238258601,
+      "roc_auc": 0.985971231749646
+    }
+  },
+  "threshold_analysis": {
+    "cost_optimal_threshold_(chosen_on_validation)": 0.3184365243290007,
+    "test_set_cost_at_that_threshold": 7766.338685621925,
+    "cost_at_default_0.5": 7634.449288721513,
+    "cost_at_max_F1_threshold": 13121.890907874553,
+    "f1_threshold": 0.9260871230091274,
+    "cost_with_no_model": 60193.737281849775,
+    "precision_at_optimal": 0.3606299212598425,
+    "recall_at_optimal": 0.9196787148594378,
+    "f1_at_optimal": 0.5180995475113123,
+    "assumptions": {
+      "FP_COST": 5.0,
+      "FN_FIXED_COST": 15.0,
+      "FN_cost": "transaction amount + FN_FIXED_COST"
+    }
+  },
+  "drift": {
+    "control": {
+      "status": "OK",
+      "score_psi": 0.0002440419333627227,
+      "reasons": [
+        "no significant drift"
+      ]
+    },
+    "later_window": {
+      "status": "RETRAIN",
+      "score_psi": 0.31896636429973374,
+      "reasons": [
+        "model score PSI=0.319 >= 0.25"
+      ],
+      "per_feature": [
+        {
+          "feature": "amount",
+          "psi": 0.21286462993033195,
+          "ks_stat": 0.18738095238095243,
+          "ks_pvalue": 0.0
+        },
+        {
+          "feature": "hour",
+          "psi": 0.00020952546964797476,
+          "ks_stat": 0.003585714285714303,
+          "ks_pvalue": 0.708724932586593
+        },
+        {
+          "feature": "merchant_risk",
+          "psi": 2.665715660171096,
+          "ks_stat": 0.3297333333333333,
+          "ks_pvalue": 0.0
+        },
+        {
+          "feature": "dist_from_home_km",
+          "psi": 0.05626772774176764,
+          "ks_stat": 0.09585714285714286,
+          "ks_pvalue": 8.221421749371384e-306
+        },
+        {
+          "feature": "txn_last_24h",
+          "psi": 2.3452873084555067e-05,
+          "ks_stat": 0.001407142857142829,
+          "ks_pvalue": 0.999999177799893
+        },
+        {
+          "feature": "avg_amount_30d",
+          "psi": 0.00042690538847333027,
+          "ks_stat": 0.006414285714285761,
+          "ks_pvalue": 0.0860292602666175
+        },
+        {
+          "feature": "card_age_days",
+          "psi": 0.00013296403872924289,
+          "ks_stat": 0.0034595238095238012,
+          "ks_pvalue": 0.749348355685881
+        },
+        {
+          "feature": "is_online",
+          "psi": 0.0,
+          "ks_stat": 0.16150476190476187,
+          "ks_pvalue": 0.0
+        }
+      ],
+      "pr_auc_later_window": 0.8189268697951967
+    }
+  }
+}
