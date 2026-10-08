@@ -68,7 +68,7 @@ a false alarm, the optimal threshold is well below the F1-optimal one.
 |---|---|
 | No model (miss all fraud) | ₹4,996,102 |
 | Threshold 0.926 (max F1 on validation) | ₹1,089,126 |
-| Default threshold 0.5 | $7,634 |
+| Default threshold 0.5 | ₹633,622 |
 | **Threshold 0.318 (min cost on validation)** | ₹644,578 |
 
 At 0.318 the model catches ~92% of fraud (recall 0.92) with precision ~0.36, so roughly 2 of 3 alerts are false
