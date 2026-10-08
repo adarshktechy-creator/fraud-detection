@@ -66,15 +66,15 @@ a false alarm, the optimal threshold is well below the F1-optimal one.
 
 | Policy | Total cost on test set |
 |---|---|
-| No model (miss all fraud) | $60,194 |
-| Threshold 0.926 (max F1 on validation) | $13,122 |
+| No model (miss all fraud) | ₹4,996,102 |
+| Threshold 0.926 (max F1 on validation) | ₹1,089,126 |
 | Default threshold 0.5 | $7,634 |
-| **Threshold 0.318 (min cost on validation)** | **$7,766** |
+| **Threshold 0.318 (min cost on validation)** | ₹644,578 |
 
 At 0.318 the model catches ~92% of fraud (recall 0.92) with precision ~0.36, so roughly 2 of 3 alerts are false
 positives. That is acceptable at these costs. Using the model cuts cost by ~87% compared with doing nothing.
 Honest caveat: the validation-chosen threshold (0.318) and the default 0.5 have almost the same test cost, so
-the cost curve is flat near the optimum; the real lesson is that accuracy-style (F1) thresholds are much worse
+the cost curve is flat near the optimum; the real lesson is that accuracy-style thresholds are much worse
 than cost-based ones. In production the threshold should be re-tuned whenever costs change or the model is retrained.
 
 ## 7. Limitations and next steps
