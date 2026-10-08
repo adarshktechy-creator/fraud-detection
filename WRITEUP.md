@@ -66,10 +66,10 @@ a false alarm, the optimal threshold is well below the F1-optimal one.
 
 | Policy | Total cost on test set(converted to ₹ from $) |
 |---|---|
-| No model (miss all fraud) | ₹4,996,102 |
-| Threshold 0.926 (max F1 on validation) | ₹1,089,126 |
-| Default threshold 0.5 | ₹633,622 |
-| **Threshold 0.318 (min cost on validation)** | ₹644,578 |
+| No model (miss all fraud) | $51,615 |
+| Threshold 0.926 (max F1 on validation) | $11,252 |
+| Default threshold 0.5 | $6,546 |
+| **Threshold 0.318 (min cost on validation)** | $6,659 |
 
 At 0.318 the model catches ~92% of fraud (recall 0.92) with precision ~0.36, so roughly 2 of 3 alerts are false
 positives. That is acceptable at these costs. Using the model cuts cost by ~87% compared with doing nothing.
@@ -80,7 +80,4 @@ than cost-based ones. In production the threshold should be re-tuned whenever co
 ## 7. Limitations and next steps
 - Synthetic data: results show the method works, not real-world performance. Run it on the Kaggle dataset too.
 - Single train/test split and one seed; use time-based cross-validation and confidence intervals.
-- Drift check on score distribution is label-free, but concept drift (fraud tactics changing) needs delayed-label
-  monitoring of PR-AUC.
-- Possible extensions: autoencoder detector, probability calibration, SHAP explanations, scheduled monitoring job
-  on AWS (e.g. SageMaker Model Monitor) triggering retraining when the alert fires.
+- Drift check on score distribution is label-free,but concept drift  needs delayed-label monitoring of PR-AUC.
