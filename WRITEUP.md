@@ -64,7 +64,7 @@ Assumptions (editable in `src/costs.py`): a false positive costs $5 (manual revi
 fraud costs the transaction amount plus a $15 chargeback/operations fee. Because missing fraud costs more than
 a false alarm, the optimal threshold is well below the F1-optimal one.
 
-| Policy | Total cost on test set |
+| Policy | Total cost on test set(converted to ₹ from $) |
 |---|---|
 | No model (miss all fraud) | ₹4,996,102 |
 | Threshold 0.926 (max F1 on validation) | ₹1,089,126 |
