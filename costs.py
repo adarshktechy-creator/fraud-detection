@@ -1,8 +1,8 @@
 """Cost-sensitive threshold selection."""
 import numpy as np
 
-FP_COST = 5.0          # review cost + customer friction per blocked legit transaction ($)
-FN_FIXED_COST = 15.0   # chargeback/ops fee per missed fraud ($); plus the transaction amount
+FP_COST = 5.0          
+FN_FIXED_COST = 15.0 
 
 
 def total_cost(y, score, amount, thr):
