@@ -11,7 +11,8 @@ def _make(n, fraud_rate, rng, drift=False):
     f = y == 1
     nf = ~f
     df = pd.DataFrame(index=range(n))
-    # legit vs fraud behave differently, with overlap so the task is not trivial
+
+            
     df["amount"] = np.where(f, rng.lognormal(5.0, 1.0, n), rng.lognormal(3.6, 1.0, n))
     hour = np.where(f, rng.normal(2.5, 4.0, n), rng.normal(14, 4.5, n))
     df["hour"] = np.mod(hour, 24)
