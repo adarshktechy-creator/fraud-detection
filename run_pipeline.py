@@ -1,4 +1,3 @@
-"""End-to-end pipeline: python -m src.run_pipeline"""
 import json, os
 import numpy as np, pandas as pd
 import matplotlib
@@ -30,7 +29,7 @@ X_tr, X_val, y_tr, y_val, amt_tr, amt_val = train_test_split(
 y_te_v, amt_te_v = y_te.values, amt_te.values
 y_val_v, amt_val_v = y_val.values, amt_val.values
 
-# ---------- 1. Imbalance strategies (supervised) ----------
+
 results = {}
 def evaluate(name, score, y=y_te_v):
     results[name] = {"pr_auc": average_precision_score(y, score), "roc_auc": roc_auc_score(y, score)}
@@ -54,13 +53,13 @@ gb_s = HistGradientBoostingClassifier(random_state=SEED).fit(X_sm, y_sm)
 s_s = gb_s.predict_proba(X_te)[:, 1]
 evaluate("GBM + SMOTE (10% minority)", s_s)
 
-# ---------- 2. Unsupervised anomaly detector ----------
+
 iso = IsolationForest(n_estimators=300, contamination=float(y_tr.mean()), random_state=SEED, n_jobs=-1)
-iso.fit(X_tr)  # no labels used
-s_iso = -iso.score_samples(X_te)  # higher = more anomalous
+iso.fit(X_tr) 
+s_iso = -iso.score_samples(X_te) 
 evaluate("Isolation Forest (unsupervised)", s_iso)
 
-# ---------- 3. PR curves ----------
+
 plt.figure(figsize=(7, 5))
 for label, key, sc in [("GBM + class weighting", "GBM + class weighting", s_w),
                        ("GBM + SMOTE", "GBM + SMOTE (10% minority)", s_s),
@@ -71,11 +70,13 @@ plt.axhline(prevalence, ls="--", c="gray", label="random baseline")
 plt.xlabel("Recall"); plt.ylabel("Precision"); plt.title("Precision-Recall curves"); plt.legend(); plt.grid(alpha=.3)
 plt.tight_layout(); plt.savefig(f"{OUT}/pr_curves.png", dpi=150); plt.close()
 
-# ---------- 4. Cost-based threshold ----------
+
 s_val = gb_w.predict_proba(X_val)[:, 1]
 thrs, cst_val = costs.sweep(y_val_v, s_val, amt_val_v)
 best_thr = float(thrs[int(np.argmin(cst_val))])  # chosen on validation only
-# F1-optimal threshold, also chosen on validation, for comparison
+
+
+
 pv, rv, tv = precision_recall_curve(y_val_v, s_val)
 f1_thr = float(tv[np.argmax(2 * pv[:-1] * rv[:-1] / np.clip(pv[:-1] + rv[:-1], 1e-9, None))])
 cst = np.array([costs.total_cost(y_te_v, s_w, amt_te_v, t) for t in thrs])  # test-set cost curve for plotting
@@ -105,7 +106,8 @@ plt.xscale("log"); plt.xlabel("Decision threshold (log)"); plt.ylabel("Total cos
 plt.title("Test-set cost vs threshold (class-weighted GBM)"); plt.legend(); plt.grid(alpha=.3)
 plt.tight_layout(); plt.savefig(f"{OUT}/cost_curve.png", dpi=150); plt.close()
 
-# ---------- 5. Drift detection + alerting ----------
+
+
 print("\n== Drift detection ==")
 def run_drift(label, window):
     rep = drift.drift_report(X_tr, window[F], F)
@@ -116,13 +118,15 @@ def run_drift(label, window):
     print(f"[{label}] status={status} score_PSI={spsi:.3f} reasons={reasons}")
     return rep, spsi, status, reasons, sc_new
 
-# control: held-out slice of same distribution (should be OK), vs drifted later window
+
+
 control = X_te.assign(is_fraud=y_te_v)
 rep_c, spsi_c, st_c, rs_c, _ = run_drift("control (same distribution)", control)
 rep_d, spsi_d, st_d, rs_d, sc_later = run_drift("later window (drifted)", later)
 print(pd.DataFrame(rep_d).round(4).to_string(index=False))
 
-# performance degradation on later window
+
+
 pr_later = average_precision_score(later.is_fraud, sc_later)
 print(f"PR-AUC on later window: {pr_later:.4f} (vs {results['GBM + class weighting']['pr_auc']:.4f} on test)")
 
